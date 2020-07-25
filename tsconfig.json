@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "lib": ["ES2019", "DOM"],
+    "module": "commonjs",
+    "target": "ES2019",
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    "noImplicitReturns": true,
+    "experimentalDecorators": true,
+    "strictPropertyInitialization": false,
+    "esModuleInterop": true,
+    "outDir": "./dist"
+  },
+  "include": ["src/**/*.ts", "@types/types.d.ts"],
+  "exclude": ["src/**/*.test.ts", "src/**/*.spec.ts"]
+}
