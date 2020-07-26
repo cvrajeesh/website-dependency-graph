@@ -4,6 +4,8 @@ A command-line tool to generate assets dependency graph from static website file
 
 Analyzes all the HTML, JavaScript and CSS files to find all the dependent assets, then generates a dependency graph. This graph includes only the internal assets, any assets linked to external URLs are excluded.
 
+![wdg-demo](https://media.giphy.com/media/Kf5hCcSqRbLOeBn6vT/source.gif)
+
 ## Getting started
 
 ###
