@@ -96,7 +96,31 @@ export const htmlReporter = async (graph: Graph) => {
 
   const filePath = path.join(outDir, `vis-${+new Date()}.html`);
   await fs.writeFile(filePath, content);
-
   await open(filePath);
-  return filePath;
+};
+
+export const dotReporter = (graph: Graph) => {
+  const edges = Array.from(graph.edgeIterator())
+    .map((edge) => `"${edge.from}" -> "${edge.to}";`)
+    .join(os.EOL);
+  const dotGraph = `digraph G {
+node [shape=box];
+${edges}
+}
+`;
+
+  process.stdout.write(dotGraph);
+};
+
+export const report = async (graph: Graph, outputFormat: string) => {
+  switch (outputFormat.toLowerCase()) {
+    case "html":
+      await htmlReporter(graph);
+      break;
+    case "dot":
+      dotReporter(graph);
+      break;
+    default:
+      throw new Error("Unsupported output format");
+  }
 };

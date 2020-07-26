@@ -19,7 +19,18 @@ yarn global add website-dependency-graph
 ### Usage
 
 ```
-$ wdg <source directory>
+$ wdg <source dir> [--output]
 ```
 
 `wdg` requires a path to your website directory as an argument to generate the dependency graph.
+
+Supports two output formats
+
+- `html` [default] - generates an HTML file in temp directory.
+- `dot` - generates dependency graph in [Graphviz](https://graphviz.org) DOT format and writes to standard output.
+
+e.g. generate dependency graph image using Graphviz `dot` command-line utility.
+
+```
+$ wdg <source dir> --output dot | dot -Tpng -o website.png
+```
