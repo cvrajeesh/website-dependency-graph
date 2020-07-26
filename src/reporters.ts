@@ -106,10 +106,9 @@ export const dotReporter = (graph: Graph) => {
   const dotGraph = `digraph G {
 node [shape=box];
 ${edges}
-}
-`;
+}`;
 
-  process.stdout.write(dotGraph);
+  return dotGraph;
 };
 
 export const report = async (graph: Graph, outputFormat: string) => {
@@ -118,7 +117,7 @@ export const report = async (graph: Graph, outputFormat: string) => {
       await htmlReporter(graph);
       break;
     case "dot":
-      dotReporter(graph);
+      process.stdout.write(dotReporter(graph));
       break;
     default:
       throw new Error("Unsupported output format");

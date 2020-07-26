@@ -12,10 +12,10 @@ describe("Graph", () => {
     const vertex = graph.getVertex("1");
 
     expect(vertex).not.toBeNull();
-    expect(vertex.id).toBe("1");
-    expect(vertex.data).toMatchObject({ label: "one" });
-    expect(vertex.in).toBe(0);
-    expect(vertex.out).toBe(0);
+    expect(vertex?.id).toBe("1");
+    expect(vertex?.data).toMatchObject({ label: "one" });
+    expect(vertex?.in).toBe(0);
+    expect(vertex?.out).toBe(0);
   });
 
   it("can create graph with two vertices", () => {
@@ -25,8 +25,8 @@ describe("Graph", () => {
     const secondVertex = graph.getVertex("2");
     const edges = Array.from(graph.edgeIterator());
 
-    expect(firstVertex.out).toBe(1);
-    expect(secondVertex.in).toBe(1);
+    expect(firstVertex?.out).toBe(1);
+    expect(secondVertex?.in).toBe(1);
 
     expect(edges).toMatchObject([{ from: "1", to: "2" }]);
   });
@@ -42,12 +42,12 @@ describe("Graph", () => {
 
     const edges = Array.from(graph.edgeIterator());
 
-    expect(firstVertex.in).toBe(1);
-    expect(firstVertex.out).toBe(1);
-    expect(secondVertex.in).toBe(1);
-    expect(secondVertex.out).toBe(1);
-    expect(thirdVertex.in).toBe(1);
-    expect(thirdVertex.out).toBe(1);
+    expect(firstVertex?.in).toBe(1);
+    expect(firstVertex?.out).toBe(1);
+    expect(secondVertex?.in).toBe(1);
+    expect(secondVertex?.out).toBe(1);
+    expect(thirdVertex?.in).toBe(1);
+    expect(thirdVertex?.out).toBe(1);
 
     expect(edges).toMatchObject([
       { from: "1", to: "2" },

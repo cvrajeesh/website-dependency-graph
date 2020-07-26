@@ -22,6 +22,6 @@ node [shape=box];
 "2" -> "4";
 }`;
 
-    expect(result).toBe(expectedDotGraph);
+    expect(result).toEqual(expectedDotGraph);
   });
 });
