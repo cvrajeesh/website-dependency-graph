@@ -1,29 +1,21 @@
 import path from "path";
+import os from "os";
 import * as fs from "./fs";
 import Graph from "./Graph";
 import open from "open";
-import os from "os";
 
-export class Visualizer {
-  constructor(private graph: Graph) {}
+export const htmlReporter = async (graph: Graph) => {
+  const nodes = Array.from(graph.vertexIterator()).map((vertex) => ({
+    id: vertex.id,
+    label: vertex.id,
+    value: vertex.out,
+    group: vertex.data.type ?? "Unknown",
+  }));
 
-  async showVisJs() {
-    const adjacencyList = this.graph.toAdjacencyList();
-    const nodes = this.graph.getNodes().map((node) => ({
-      id: node.id,
-      label: node.id,
-      value: node.neighbors,
-      group: node.attributes?.type ?? "Unknown",
-    }));
+  const nodeData = JSON.stringify(nodes);
+  const edgeData = JSON.stringify(Array.from(graph.edgeIterator()));
 
-    const nodeData = JSON.stringify(nodes);
-    const edgeData = JSON.stringify(
-      Object.keys(adjacencyList)
-        .map((from) => adjacencyList[from].map((to) => ({ from, to })))
-        .flat()
-    );
-
-    const content = `
+  const content = `
     <!DOCTYPE html>
     <html lang="en">
       <head>
@@ -96,16 +88,15 @@ export class Visualizer {
     </html>
     `;
 
-    const outDir = path.join(os.tmpdir(), "wag");
-    const outDirExists = await fs.exists(outDir);
-    if (!outDirExists) {
-      await fs.mkdir(outDir);
-    }
-
-    const filePath = path.join(outDir, `vis-${+new Date()}.html`);
-    await fs.writeFile(filePath, content);
-
-    await open(filePath);
-    return filePath;
+  const outDir = path.join(os.tmpdir(), "wag");
+  const outDirExists = await fs.exists(outDir);
+  if (!outDirExists) {
+    await fs.mkdir(outDir);
   }
-}
+
+  const filePath = path.join(outDir, `vis-${+new Date()}.html`);
+  await fs.writeFile(filePath, content);
+
+  await open(filePath);
+  return filePath;
+};

@@ -2,8 +2,9 @@
 import yargs from "yargs";
 import fs from "fs";
 import path from "path";
-import { processAndShowDependencyGraph } from "./Website";
 import ora from "ora";
+import { Website } from "./Website";
+import { htmlReporter } from "./reporters";
 
 const spinner = ora();
 
@@ -32,7 +33,9 @@ yargs
     async (argv: { source: string }) => {
       spinner.start("Analyzing website files...");
       const sourceDir = path.resolve(argv.source);
-      const resultPath = await processAndShowDependencyGraph(sourceDir);
+      const website = new Website(sourceDir);
+      const dependencyGraph = await website.process();
+      const resultPath = await htmlReporter(dependencyGraph);
       spinner.succeed(`Analysis completed.`);
       console.log(`Visualization saved to temp directory ${resultPath}`);
     }

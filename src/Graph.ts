@@ -1,21 +1,56 @@
-type NodeAttribute = Record<string, any>;
+type VertexData = Record<string, any>;
+export class Vertex {
+  private inDegree: number = 0;
+  private outDegree: number = 0;
 
-export default class Graph {
-  private adjList: Map<string, string[]>;
-  private attributes: Map<string, NodeAttribute>;
+  constructor(public readonly id: string, public data: VertexData = {}) {}
 
-  constructor() {
-    this.adjList = new Map<string, string[]>();
-    this.attributes = new Map<string, Record<string, any>>();
+  /**
+   * Get InDegree
+   */
+  public get in(): number {
+    return this.inDegree;
   }
 
-  addVertex(vertex: string, attribute?: NodeAttribute) {
-    if (!this.adjList.has(vertex)) {
-      this.adjList.set(vertex, []);
+  /**
+   * Get OutDegree
+   */
+  public get out(): number {
+    return this.outDegree;
+  }
+
+  incInDegree() {
+    this.inDegree++;
+  }
+
+  incOutDegree() {
+    this.outDegree++;
+  }
+}
+
+export type Edge = { from: string; to: string };
+
+export default class Graph {
+  private adjList: Map<string, Set<string>>;
+  private vertices: Map<string, Vertex>;
+
+  constructor() {
+    this.adjList = new Map<string, Set<string>>();
+    this.vertices = new Map<string, Vertex>();
+  }
+
+  getVertex(id: string): Vertex | null {
+    const vertex = this.vertices.get(id);
+    return vertex ?? null;
+  }
+
+  addVertex(id: string, data?: VertexData) {
+    if (!this.adjList.has(id)) {
+      this.adjList.set(id, new Set<string>());
     }
 
-    if (!this.attributes.has(vertex)) {
-      this.attributes.set(vertex, attribute ?? {});
+    if (!this.vertices.has(id)) {
+      this.vertices.set(id, new Vertex(id, data));
     }
   }
 
@@ -23,32 +58,23 @@ export default class Graph {
     this.addVertex(from);
     this.addVertex(to);
 
-    this.adjList.get(from)?.push(to);
+    this.getVertex(from)?.incOutDegree();
+    this.getVertex(to)?.incInDegree();
+
+    this.adjList.get(from)?.add(to);
   }
 
-  toAdjacencyList() {
-    const data: Record<string, string[]> = {};
-    for (const [key, value] of this.adjList.entries()) {
-      data[key] = value;
+  *edgeIterator() {
+    for (const [from, neighbors] of this.adjList.entries()) {
+      for (const to of neighbors) {
+        yield <Edge>{ from, to };
+      }
     }
-
-    return data;
   }
 
-  getNodes() {
-    const nodes: {
-      id: string;
-      neighbors: number;
-      attributes?: NodeAttribute;
-    }[] = [];
-    this.adjList.forEach((_value, key) => {
-      nodes.push({
-        id: key,
-        neighbors: this.adjList.get(key)?.length ?? 0,
-        attributes: this.attributes.get(key),
-      });
-    });
-
-    return nodes;
+  *vertexIterator() {
+    for (const entry of this.vertices.entries()) {
+      yield entry[1];
+    }
   }
 }

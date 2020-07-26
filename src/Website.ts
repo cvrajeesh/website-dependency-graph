@@ -6,7 +6,6 @@ import { HtmlAsset } from "./HtmlAsset";
 import { CSSAsset } from "./CSSAsset";
 import { JSAsset } from "./JSAsset";
 import Graph from "./Graph";
-import { Visualizer } from "./Visualizer";
 
 export class Website {
   constructor(private directory: string) {}
@@ -55,10 +54,3 @@ export class Website {
     return graph;
   }
 }
-
-export const processAndShowDependencyGraph = async (sourceDir: string) => {
-  const website = new Website(sourceDir);
-  const dependencyGraph = await website.process();
-  const visualizer = new Visualizer(dependencyGraph);
-  return visualizer.showVisJs();
-};
